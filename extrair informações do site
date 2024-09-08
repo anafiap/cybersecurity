@@ -1,0 +1,25 @@
+#!/bin/bash
+ 
+#extrair informações do site
+extract_info() {
+    local url="$1"
+    local title
+    local server
+    local language
+ 
+    #título do site
+    title=$(curl -s "$url" | grep -oP '<title>\K.*?(?=<\/title>)')
+ 
+    #informações do cabeçalho HTTP (servidor)
+    server=$(curl -I -s "$url" | grep -i '^server:' | awk '{print $2}')
+ 
+    #linguagem de programação 
+    language=$(curl -I -s "$url" | grep -i '^content-type:' | awk -F'[ ;]' '{print $2}')
+ 
+    echo "Título do site: $title"
+    echo "Servidor web: $server"
+    echo "Linguagem de programação: $language"
+}
+ 
+
+extract_info "https://www.wikipedia.org"
